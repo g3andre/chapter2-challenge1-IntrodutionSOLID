@@ -1,0 +1,140 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Chapter 2 Challenge 1 API",
+    "description": "Documentation of Ignite Chapter 2 Challenge 1 Node trail",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "UserKeyAuth": {
+        "type": "apiKey",
+        "description": "Id of user",
+        "in": "header",
+        "name": "user_id"
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Add a new User",
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "User already exists"
+          }
+        }
+      },
+      "get": {
+        "summary": "List all users",
+        "description": "Return an array of objects",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "You dont have permissions"
+          }
+        },
+        "security": [{"UserKeyAuth":[]}]
+      }    
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Find user by Id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "Id of user to be fetched",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "User not found"
+          }
+        },
+        "security": [{"UserKeyAuth": []}]
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch":{
+        "summary": "Turn a user into an admin",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "Id of user to be transformed into admin",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful operation"
+          },
+          "400": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  }
+}
